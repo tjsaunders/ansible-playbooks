@@ -1,13 +1,13 @@
 ---
-- name: Download NodeJS install script
+- name: Download NodeJS
   get_url:
-    url: https://raw.githubusercontent.com/sdesalas/node-pi-zero/master/install-node-v.lts.sh
-    dest: ~/install-node.sh
-    mode: u=rwx,g=rw,o=rw
-- name: Install NodeJS
-  command: ~/install-node.sh
-  args:
-    creates: /usr/bin/node
+    url: 'https://unofficial-builds.nodejs.org/download/release/{{ nodejs_armv6l_version }}/node-{{ nodejs_armv6l_version }}-linux-armv6l.tar.gz'
+    dest: '~/node-{{ nodejs_armv6l_version }}-linux-armv6l.tar.gz'
+    checksum: 'sha256:https://unofficial-builds.nodejs.org/download/release/{{ nodejs_armv6l_version }}/SHASUMS256.txt'
+    force: no
+  notify: "Reinstall NodeJS"
+- name: Flush handlers
+  meta: flush_handlers
 - name: Add npm module binaries to PATH
   lineinfile:
     dest: ~/.profile
